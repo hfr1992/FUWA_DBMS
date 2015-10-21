@@ -13,6 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="源文件\storage">
+      <UniqueIdentifier>{8a4cc6b9-4dee-4d77-ade9-47366fefc507}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\storage">
+      <UniqueIdentifier>{6805ce75-6fd3-4761-9489-480dcab510b0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -24,6 +30,12 @@
     <ClInclude Include="targetver.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="storage\DataFileManager.h">
+      <Filter>头文件\storage</Filter>
+    </ClInclude>
+    <ClInclude Include="Config.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -31,6 +43,9 @@
     </ClCompile>
     <ClCompile Include="FUWA_DBMS.cpp">
       <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="storage\DataFileManager.cpp">
+      <Filter>源文件\storage</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
