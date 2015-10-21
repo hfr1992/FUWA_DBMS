@@ -148,12 +148,18 @@
     <ClInclude Include="Config.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="storage\DataFileManager.h" />
+    <ClInclude Include="storage\DBFileManager.h" />
+    <ClInclude Include="storage\DictionaryFileManager.h" />
+    <ClInclude Include="storage\IndexFileManager.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="FUWA_DBMS.cpp" />
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="storage\DataFileManager.cpp" />
+    <ClCompile Include="storage\DBFileManager.cpp" />
+    <ClCompile Include="storage\DictionaryFileManager.cpp" />
+    <ClCompile Include="storage\IndexFileManager.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

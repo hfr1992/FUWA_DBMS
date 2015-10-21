@@ -36,6 +36,15 @@
     <ClInclude Include="Config.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="storage\DBFileManager.h">
+      <Filter>头文件\storage</Filter>
+    </ClInclude>
+    <ClInclude Include="storage\IndexFileManager.h">
+      <Filter>头文件\storage</Filter>
+    </ClInclude>
+    <ClInclude Include="storage\DictionaryFileManager.h">
+      <Filter>头文件\storage</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -45,6 +54,15 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="storage\DataFileManager.cpp">
+      <Filter>源文件\storage</Filter>
+    </ClCompile>
+    <ClCompile Include="storage\DBFileManager.cpp">
+      <Filter>源文件\storage</Filter>
+    </ClCompile>
+    <ClCompile Include="storage\IndexFileManager.cpp">
+      <Filter>源文件\storage</Filter>
+    </ClCompile>
+    <ClCompile Include="storage\DictionaryFileManager.cpp">
       <Filter>源文件\storage</Filter>
     </ClCompile>
   </ItemGroup>

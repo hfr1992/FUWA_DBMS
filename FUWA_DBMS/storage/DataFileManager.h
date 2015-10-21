@@ -19,12 +19,13 @@ private:
 	FILE * fp;
 	//Name of the file
 	static string dataFileName;
-	//Point to this class
-	static DataFileManager * dataFileManager;
-	//Constructor
-	DataFileManager();
-	//Destructor
-	virtual ~DataFileManager();
 	//Set the file pointer
 	void setPointer(long offset, int fromwhere);
+	//Point to this class
+	static DataFileManager * dataFileManager;
+protected:
+	//Constructor
+	DataFileManager(string fileName);
+	//Destructor
+	virtual ~DataFileManager();
 };

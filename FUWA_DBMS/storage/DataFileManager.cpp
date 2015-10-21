@@ -3,13 +3,13 @@
 
 DataFileManager * DataFileManager::dataFileManager = 0;
 
-DataFileManager::DataFileManager()
+DataFileManager::DataFileManager(string fileName)
 {
-	if (access(DATA_FILE, 0)!=0) 
+	if (access(fileName.c_str(), 0)!=0)
 	{
-		fclose(fopen(DATA_FILE, "w"));
+		fclose(fopen(fileName.c_str(), "w"));
 	}
-	fp = fopen(DATA_FILE, "r+");
+	fp = fopen(fileName.c_str(), "r+b");
 }
 
 DataFileManager::~DataFileManager()
@@ -21,7 +21,7 @@ DataFileManager * DataFileManager::getInstance()
 {
 	if (dataFileManager == 0)
 	{
-		dataFileManager = new DataFileManager();
+		dataFileManager = new DataFileManager(DATA_FILE);
 	}
 	return dataFileManager;
 }
