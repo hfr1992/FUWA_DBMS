@@ -65,5 +65,8 @@
     <ClCompile Include="storage\DictionaryFileManager.cpp">
       <Filter>源文件\storage</Filter>
     </ClCompile>
+    <ClCompile Include="Config.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

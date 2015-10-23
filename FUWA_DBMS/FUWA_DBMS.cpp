@@ -5,50 +5,49 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
-#include "storage/IndexFileManager.h"
+#include "storage/DBFileManager.h"
 using namespace std;
 
-void testDataFileManager() 
+//void testDataFileManager() 
+//{
+//	cout << "Testing DataFileManager..." << endl;
+//
+//	DataFileManager * dataFileManager = DataFileManager::getInstance();
+//
+//	dataFileManager->append("Hello, Data!");
+//	dataFileManager->insert(5, "**");
+//
+//	char temp[10] = {'\0'};
+//	dataFileManager->read(temp, 0, 9);
+//	cout << temp << endl;
+//
+//	cout << dataFileManager->length() << endl;
+//
+//	cout << "DataFileManager Test Finished." << endl;
+//}
+
+void testDBFileManager()
 {
-	cout << "Testing DataFileManager..." << endl;
+	cout << "Testing DBFileManager..." << endl;
 
-	DataFileManager * dataFileManager = DataFileManager::getInstance();
+	DBFileManager * dBFileManager = DBFileManager::getInstance();
 
-	dataFileManager->append("Hello, Data!");
-	dataFileManager->insert(5, "**");
+	const char * temp = "Hello, world!";
 
-	char temp[10] = {'\0'};
-	dataFileManager->read(temp, 0, 9);
-	cout << temp << endl;
+	dBFileManager->append(temp, strlen(temp));
+	dBFileManager->insert(5, "**", 2);
 
-	cout << dataFileManager->length() << endl;
+	cout << dBFileManager->length() << endl;
 
-	cout << "DataFileManager Test Finished." << endl;
-}
-
-void testIndexFileManager()
-{
-	cout << "Testing IndexFileManager..." << endl;
-
-	IndexFileManager * indexFileManager = IndexFileManager::getInstance();
-
-	indexFileManager->append("Hello, Index!");
-	indexFileManager->insert(5, "**");
-
-	char temp[10] = { '\0' };
-	indexFileManager->read(temp, 0, 9);
-	cout << temp << endl;
-
-	cout << indexFileManager->length() << endl;
-
-	cout << "IndexFileManager Test Finished." << endl;
+	cout << "DBFileManager Test Finished." << endl;
 }
 
 int main()
 {
 	printf("DBMS start!\n");
-	testDataFileManager();
-	testIndexFileManager();
+	//testDataFileManager();
+	testDBFileManager();
+	//cout << sizeof(char) << endl;
 	printf("DBMS shut down!\n");
 	system("pause");
     return 0;

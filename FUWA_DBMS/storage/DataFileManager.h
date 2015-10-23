@@ -3,17 +3,6 @@
 using namespace std;
 
 class DataFileManager {
-public:
-	//Get this class
-	static DataFileManager * getInstance();
-	//Read from the data file
-	void read(char * data, long from, long size);
-	//Insert into the file
-	void insert(long from, const char * data);
-	//Append to the file
-	void append(const char * data);
-	//Get the length of the file
-	long length();
 private:
 	//File pointer
 	FILE * fp;
@@ -28,4 +17,14 @@ protected:
 	DataFileManager(string fileName);
 	//Destructor
 	virtual ~DataFileManager();
+	//Get this class
+	static DataFileManager * getInstance();
+	//Read from the data file
+	void read(char * data, long from, long size);
+	//Insert into the file
+	void insert(long from, const char * data, int length);
+	//Append to the file
+	void append(const char * data, int length);
+	//Get the length of the file
+	long length();
 };

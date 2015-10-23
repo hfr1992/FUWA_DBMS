@@ -154,6 +154,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Config.cpp" />
     <ClCompile Include="FUWA_DBMS.cpp" />
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="storage\DataFileManager.cpp" />
