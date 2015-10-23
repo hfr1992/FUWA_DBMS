@@ -147,6 +147,7 @@
   <ItemGroup>
     <ClInclude Include="Config.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="storage\BufferManager.h" />
     <ClInclude Include="storage\DataFileManager.h" />
     <ClInclude Include="storage\DBFileManager.h" />
     <ClInclude Include="storage\DictionaryFileManager.h" />
@@ -157,6 +158,7 @@
     <ClCompile Include="Config.cpp" />
     <ClCompile Include="FUWA_DBMS.cpp" />
     <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="storage\BufferManager.cpp" />
     <ClCompile Include="storage\DataFileManager.cpp" />
     <ClCompile Include="storage\DBFileManager.cpp" />
     <ClCompile Include="storage\DictionaryFileManager.cpp" />

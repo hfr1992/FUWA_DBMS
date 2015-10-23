@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <iostream>
 #include "storage/DBFileManager.h"
+#include <unordered_map>
 using namespace std;
 
 //void testDataFileManager() 
@@ -42,11 +43,20 @@ void testDBFileManager()
 	cout << "DBFileManager Test Finished." << endl;
 }
 
+void testHashMap()
+{
+	unordered_map<int, int> bhp;
+	bhp[1] = 2;
+	bhp[2] = 0;
+	cout << bhp[3] << endl;
+}
+
 int main()
 {
 	printf("DBMS start!\n");
 	//testDataFileManager();
-	testDBFileManager();
+	//testDBFileManager();
+	testHashMap();
 	//cout << sizeof(char) << endl;
 	printf("DBMS shut down!\n");
 	system("pause");

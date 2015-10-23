@@ -10,5 +10,8 @@
 #define MAX_PAGE_NUM 40000
 #define SIZE_PER_PAGE 4*1024
 
+//Buffer
+#define BUFFER_SIZE 2000
+
 //Convert from int to bytes (the size of DB file can't be larger than 4GB because we use unsigned int as the file pointer)
 void intToBytes(const char * data, char * result);

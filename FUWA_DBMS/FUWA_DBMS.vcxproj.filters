@@ -45,6 +45,9 @@
     <ClInclude Include="storage\DictionaryFileManager.h">
       <Filter>头文件\storage</Filter>
     </ClInclude>
+    <ClInclude Include="storage\BufferManager.h">
+      <Filter>头文件\storage</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -67,6 +70,9 @@
     </ClCompile>
     <ClCompile Include="Config.cpp">
       <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="storage\BufferManager.cpp">
+      <Filter>源文件\storage</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
