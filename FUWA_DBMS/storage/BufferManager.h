@@ -25,6 +25,7 @@ private:
 	long eliminatePointer;
 	struct Buffer buffer;
 	unordered_map<int, int> bufferHashMap;
+	struct DB_FILE_Header dB_FILE_Header;
 	BufferManager();
 	~BufferManager();
 	long findPage(long pageNumber);

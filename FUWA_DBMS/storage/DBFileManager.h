@@ -1,11 +1,6 @@
 #include "DataFileManager.h"
 #include "../Config.h"
 
-struct DB_FILE_Header
-{
-	int bitMap[MAX_PAGE_NUM/8];
-};
-
 class DBFileManager :public DataFileManager {
 public:
 	static DBFileManager * getInstance();
@@ -17,8 +12,13 @@ public:
 	void append(const char * data, int length);
 	//Get the length of the file
 	long length();
+	struct DB_FILE_Header * getDBFileHeader();
+	void setDBFileHeader(struct DB_FILE_Header * Header);
 private:
 	static DBFileManager * dBFileManager;
+	struct DB_FILE_Header dB_FILE_Header;
 	DBFileManager(string fileName);
 	~DBFileManager();
+	void getBitMap();
+	void createBitMap();
 };

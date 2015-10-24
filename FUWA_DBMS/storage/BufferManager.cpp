@@ -83,6 +83,9 @@ BufferManager::BufferManager()
 	{
 		importOnePage(i+1);
 	}
+
+	//Import the header of the DB File
+	memcpy(&dB_FILE_Header, dBFileManager->getDBFileHeader(), sizeof(DB_FILE_Header));
 }
 
 BufferManager::~BufferManager()

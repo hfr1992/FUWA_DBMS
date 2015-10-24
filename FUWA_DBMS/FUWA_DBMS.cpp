@@ -36,7 +36,7 @@ void testDBFileManager()
 	const char * temp = "Hello, world!";
 
 	dBFileManager->append(temp, strlen(temp));
-	dBFileManager->insert(5, "**", 2);
+	dBFileManager->insert("**", 5, 2);
 
 	cout << dBFileManager->length() << endl;
 
@@ -51,13 +51,21 @@ void testHashMap()
 	cout << bhp[3] << endl;
 }
 
+void testSetBitMap()
+{
+	char temp[3] = { 0x00, 0x00, 0x00 };
+	setBitMap(temp, 9, 1);
+	cout << int(temp[0]) << "_" << int(temp[1]) << "_" << int(temp[2]) << endl;
+}
+
 int main()
 {
 	printf("DBMS start!\n");
 	//testDataFileManager();
 	//testDBFileManager();
-	testHashMap();
+	//testHashMap();
 	//cout << sizeof(char) << endl;
+	testSetBitMap();
 	printf("DBMS shut down!\n");
 	system("pause");
     return 0;

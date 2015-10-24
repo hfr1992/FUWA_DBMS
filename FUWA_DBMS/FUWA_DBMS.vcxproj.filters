@@ -48,6 +48,9 @@
     <ClInclude Include="storage\BufferManager.h">
       <Filter>头文件\storage</Filter>
     </ClInclude>
+    <ClInclude Include="storage\TableManager.h">
+      <Filter>头文件\storage</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -72,6 +75,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="storage\BufferManager.cpp">
+      <Filter>源文件\storage</Filter>
+    </ClCompile>
+    <ClCompile Include="storage\TableManager.cpp">
       <Filter>源文件\storage</Filter>
     </ClCompile>
   </ItemGroup>

@@ -152,6 +152,7 @@
     <ClInclude Include="storage\DBFileManager.h" />
     <ClInclude Include="storage\DictionaryFileManager.h" />
     <ClInclude Include="storage\IndexFileManager.h" />
+    <ClInclude Include="storage\TableManager.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
@@ -163,6 +164,7 @@
     <ClCompile Include="storage\DBFileManager.cpp" />
     <ClCompile Include="storage\DictionaryFileManager.cpp" />
     <ClCompile Include="storage\IndexFileManager.cpp" />
+    <ClCompile Include="storage\TableManager.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
