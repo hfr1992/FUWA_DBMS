@@ -17,12 +17,12 @@ void DBFileManager::read(char * data, long from, long size)
 	DataFileManager::read(data, from, size);
 }
 
-void DBFileManager::insert(long from, const char * data, int length)
+void DBFileManager::insert(const char * data, long from, int length)
 {
 	char int_Bytes[4] = { '\0' };
 	intToBytes(data, int_Bytes);
-	DataFileManager::insert(from, int_Bytes, 4);
-	DataFileManager::insert(from + 4, data, length);
+	DataFileManager::insert(int_Bytes, from, 4);
+	DataFileManager::insert(data, from + 4, length);
 }
 
 void DBFileManager::append(const char * data, int length)

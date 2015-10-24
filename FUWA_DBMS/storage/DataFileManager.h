@@ -22,7 +22,7 @@ protected:
 	//Read from the data file
 	void read(char * data, long from, long size);
 	//Insert into the file
-	void insert(long from, const char * data, int length);
+	void insert(const char * data, long from, int length);
 	//Append to the file
 	void append(const char * data, int length);
 	//Get the length of the file

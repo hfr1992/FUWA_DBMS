@@ -37,7 +37,7 @@ void DataFileManager::read(char * data, long from, long size)
 	fread(data, sizeof(char), size, fp);
 }
 
-void DataFileManager::insert(long from, const char * data, int length)
+void DataFileManager::insert(const char * data, long from, int length)
 {
 	setPointer(from, SEEK_SET);
 	fwrite(data, sizeof(char), length, fp);

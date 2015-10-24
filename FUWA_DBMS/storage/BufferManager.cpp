@@ -20,13 +20,28 @@ long BufferManager::exchangePages(long pageNumber)
 		buffer.bufferUnit[eliminatePointer].flagSCH--;
 		eliminatePointer = (eliminatePointer + 1) % (BUFFER_SIZE);
 	}
+
+	exportOnePage(pageNumber);
+	importOnePage(pageNumber);
+
+	//return the last position before the eliminate pointer
+	return ((eliminatePointer + BUFFER_SIZE) - 1) % (BUFFER_SIZE);
+}
+
+void BufferManager::importOnePage(long pageNumber)
+{
 	DBFileManager * dBFileManager = DBFileManager::getInstance();
-	dBFileManager->read(buffer.bufferUnit[eliminatePointer].data, (pageNumber-1)*(SIZE_PER_PAGE), SIZE_PER_PAGE);
+	dBFileManager->read(buffer.bufferUnit[eliminatePointer].data, (pageNumber - 1)*(SIZE_PER_PAGE), SIZE_PER_PAGE);
 	buffer.bufferUnit[eliminatePointer].flagSCH = 1;
 	buffer.bufferUnit[eliminatePointer].pageNumber = pageNumber;
-	eliminatePointer++;
+	bufferHashMap[pageNumber] = eliminatePointer;
+	eliminatePointer = (eliminatePointer + 1) % (BUFFER_SIZE);
+}
 
-	return eliminatePointer - 1;
+void BufferManager::exportOnePage(long pageNumber)
+{
+	DBFileManager * dBFileManager = DBFileManager::getInstance();
+	dBFileManager->insert(buffer.bufferUnit[eliminatePointer].data, (pageNumber - 1)*(SIZE_PER_PAGE), SIZE_PER_PAGE);
 }
 
 long BufferManager::findPage(long pageNumber)
@@ -66,17 +81,8 @@ BufferManager::BufferManager()
 
 	for (long i = 0; i < times; i++)
 	{
-		dBFileManager->read( buffer.bufferUnit[i].data, i * BUFFER_SIZE, BUFFER_SIZE );
-		buffer.bufferUnit[i].flagSCH = 1;
-		buffer.bufferUnit[i].pageNumber = i+1;
-		bufferHashMap[i] = i;
+		importOnePage(i+1);
 	}
-	dBFileManager->read( buffer.bufferUnit[times].data, times * BUFFER_SIZE, DBFileLength - times * BUFFER_SIZE );
-	buffer.bufferUnit[times].flagSCH = 1;
-	buffer.bufferUnit[times].pageNumber = times+1;
-	bufferHashMap[times] = times;
-
-	eliminatePointer = (times + 1)%(BUFFER_SIZE);
 }
 
 BufferManager::~BufferManager()

@@ -29,4 +29,6 @@ private:
 	~BufferManager();
 	long findPage(long pageNumber);
 	long exchangePages(long pageNumber);
+	void importOnePage(long pageNumber);
+	void exportOnePage(long pageNumber);
 };
