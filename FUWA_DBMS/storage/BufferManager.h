@@ -20,6 +20,7 @@ public:
 	static BufferManager * getInstance();
 	void read(char * data,long pageNumber, long from, long size);
 	void write(char * data, long pageNumber, long from, long size);
+	long findSpace(int spaceSize);
 private:
 	static BufferManager * bufferManager;
 	long eliminatePointer;

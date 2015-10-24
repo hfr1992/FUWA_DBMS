@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <iostream>
 #include "storage/DBFileManager.h"
+#include "storage/BitMapIterator.h"
 #include <unordered_map>
 using namespace std;
 
@@ -34,9 +35,13 @@ void testDBFileManager()
 	DBFileManager * dBFileManager = DBFileManager::getInstance();
 
 	const char * temp = "Hello, world!";
+	char * temp2 = (char *)malloc(sizeof(char)*100);
 
 	dBFileManager->append(temp, strlen(temp));
-	dBFileManager->insert("**", 5, 2);
+	//dBFileManager->insert("**", 8000, 2);
+	//dBFileManager->read(temp2, 6000, 99);
+	//temp2[99] = '\0';
+	//cout << temp2 << endl;
 
 	cout << dBFileManager->length() << endl;
 
@@ -53,9 +58,14 @@ void testHashMap()
 
 void testSetBitMap()
 {
-	char temp[3] = { 0x00, 0x00, 0x00 };
-	setBitMap(temp, 9, 1);
-	cout << int(temp[0]) << "_" << int(temp[1]) << "_" << int(temp[2]) << endl;
+	char temp[3] = { 0x08, 0x00, 0x10 };
+	BitMapIterator bmi(temp, 24);
+	while (bmi.hasNext()) 
+	{
+		cout << bmi.next() << endl;
+	}
+	//setBitMap(temp, 9, 1);
+	//cout << int(temp[0]) << "_" << int(temp[1]) << "_" << int(temp[2]) << endl;
 }
 
 int main()

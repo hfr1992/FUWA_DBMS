@@ -71,6 +71,11 @@ void BufferManager::write(char * data, long pageNumber, long from, long size)
 	bUnit.flagSCH = 1;
 }
 
+long BufferManager::findSpace(int spaceSize)
+{
+	return 0;
+}
+
 BufferManager::BufferManager() 
 {
 	DBFileManager * dBFileManager = DBFileManager::getInstance();
@@ -84,7 +89,7 @@ BufferManager::BufferManager()
 		importOnePage(i+1);
 	}
 
-	//Import the header of the DB File
+	//Import the header of the DB File (BitMap)
 	memcpy(&dB_FILE_Header, dBFileManager->getDBFileHeader(), sizeof(DB_FILE_Header));
 }
 
