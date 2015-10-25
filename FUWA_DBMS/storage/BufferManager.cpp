@@ -107,12 +107,12 @@ long BufferManager::findFreeSpace(int spaceSize)
 {
 	char temp[PAGE_SIZE];
 	BitMapIterator bmi(dB_FILE_Header.bitMap, MAX_PAGE_NUM / 8);
+	int freeSpace = 0;
 	while (bmi.hasNext())
 	{
 		if (bmi.next() == 0) 
 		{
 			read(temp, (bmi.currentIndex() + 1), 0, PAGE_SIZE);
-			int freeSpace = 0;
 			for (int i = 0; i < PAGE_SIZE; i++)
 			{
 				if (temp[i] == '\0')
@@ -136,10 +136,35 @@ long BufferManager::findFreeSpace(int spaceSize)
 long BufferManager::insertOneTuple(char * tuple, int size)
 {
 	long insertPosition = findFreeSpace(size);
-	write(tuple, getPageNumber(insertPosition), getPagePosition(insertPosition), size);
-	if (isPageWritable(getPageNumber(insertPosition)) == false)
+	if (BUFFER_SIZE - getPagePosition(insertPosition) > size)
 	{
-		setFileHeader(getPageNumber(insertPosition), 1);
+		//Just one segment
+		write(tuple, getPageNumber(insertPosition), getPagePosition(insertPosition), size);
+		if (isPageWritable(getPageNumber(insertPosition)) == false) setFileHeader(getPageNumber(insertPosition), 1);
+	}
+	else
+	{
+		//More than one segment
+		//First segment
+		write(tuple, getPageNumber(insertPosition), getPagePosition(insertPosition), BUFFER_SIZE - getPagePosition(insertPosition));
+		if (isPageWritable(getPageNumber(insertPosition)) == false) setFileHeader(getPageNumber(insertPosition), 1);
+		size -= (BUFFER_SIZE - getPagePosition(insertPosition));
+		tuple += (BUFFER_SIZE - getPagePosition(insertPosition));
+		insertPosition += (BUFFER_SIZE - getPagePosition(insertPosition));
+
+		//Second to last second segments
+		while (size > BUFFER_SIZE) 
+		{
+			write(tuple, getPageNumber(insertPosition), getPagePosition(insertPosition), BUFFER_SIZE);
+			setFileHeader(getPageNumber(insertPosition), 1);
+			size -= BUFFER_SIZE;
+			tuple += BUFFER_SIZE;
+			insertPosition += BUFFER_SIZE;
+		}
+
+		//last segment
+		write(tuple, getPageNumber(insertPosition), getPagePosition(insertPosition), size);
+		if (isPageWritable(getPageNumber(insertPosition)) == false) setFileHeader(getPageNumber(insertPosition), 1);
 	}
 	return insertPosition;
 }
@@ -151,16 +176,47 @@ void BufferManager::selectOneTuple(char * tuple, int size, long position)
 
 void BufferManager::deleteOneTuple(int size, long position)
 {
-	char * temp = (char *)malloc( size * sizeof(char) );
-	for (int i = 0; i < size; i++)
+	if (BUFFER_SIZE - getPagePosition(position) > size)
 	{
-		temp[i] = '\0';
+		char * temp = (char *)malloc(size * sizeof(char));
+		for (int i = 0; i < size; i++) temp[i] = '\0';
+		write(temp, getPageNumber(position), getPagePosition(position), size);
+		setFileHeader(getPageNumber(position), 0);
+		free(temp);
 	}
-	write(temp, getPageNumber(position), getPagePosition(position), size);
+	else
+	{
+		//More than one segment
+		//First segment
+		char * temp = (char *)malloc((BUFFER_SIZE - getPagePosition(position)) * sizeof(char));
+		for (int i = 0; i < (BUFFER_SIZE - getPagePosition(position)); i++) temp[i] = '\0';
+		write(temp, getPageNumber(position), getPagePosition(position), (BUFFER_SIZE - getPagePosition(position)));
+		setFileHeader(getPageNumber(position), 0);
+		size -= (BUFFER_SIZE - getPagePosition(position));
+		position += (BUFFER_SIZE - getPagePosition(position));
+		free(temp);
 
-	setFileHeader(getPageNumber(position), 0);
+		//Second to last second segments
+		char * temp = (char *)malloc(BUFFER_SIZE * sizeof(char));
+		for (int i = 0; i < BUFFER_SIZE; i++) temp[i] = '\0';
+		while (size > BUFFER_SIZE)
+		{
+			write(temp, getPageNumber(position), getPagePosition(position), BUFFER_SIZE);
+			setFileHeader(getPageNumber(position), 0);
+			size -= BUFFER_SIZE;
+			position += BUFFER_SIZE;
+		}
+		free(temp);
 
-	free(temp);
+		//last segment
+		char * temp = (char *)malloc(size * sizeof(char));
+		for (int i = 0; i < size; i++) temp[i] = '\0';
+		write(temp, getPageNumber(position), getPagePosition(position), size);
+		setFileHeader(getPageNumber(position), 0);
+		free(temp);
+
+	}
+
 }
 
 BufferManager::BufferManager() 
