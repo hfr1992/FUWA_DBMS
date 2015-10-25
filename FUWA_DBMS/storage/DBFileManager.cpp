@@ -19,17 +19,11 @@ void DBFileManager::read(char * data, long from, long size)
 
 void DBFileManager::insert(const char * data, long from, int length)
 {
-	char int_Bytes[4] = { '\0' };
-	intToBytes(data, int_Bytes);
-	DataFileManager::insert(int_Bytes, from, 4);
-	DataFileManager::insert(data, from + 4, length);
+	DataFileManager::insert(data, from, length);
 }
 
 void DBFileManager::append(const char * data, int length)
 {
-	char int_Bytes[4] = { '\0' };
-	intToBytes(data, int_Bytes);
-	DataFileManager::append(int_Bytes,4);
 	DataFileManager::append(data, length);
 }
 
@@ -46,6 +40,7 @@ DB_FILE_Header * DBFileManager::getDBFileHeader()
 void DBFileManager::setDBFileHeader(DB_FILE_Header * Header)
 {
 	insert(Header->bitMap, 0, (MAX_PAGE_NUM / 8)*sizeof(char));
+	memcpy(&dB_FILE_Header, Header, sizeof(DB_FILE_Header));
 }
 
 DBFileManager::DBFileManager(string fileName) : DataFileManager(fileName)

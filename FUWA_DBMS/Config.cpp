@@ -2,13 +2,12 @@
 #include <iostream>
 using namespace std;
 
-void intToBytes(const char * data, char * result)
+void intToBytes(int intNumber, char * result)
 {
-	unsigned int strLenInt = strlen(data);
-	result[0] = (char)((0xff000000 & strLenInt) >> 24);
-	result[1] = (char)((0x00ff0000 & strLenInt) >> 16);
-	result[2] = (char)((0x0000ff00 & strLenInt) >> 8);
-	result[3] = (char)((0x000000ff & strLenInt));
+	result[0] = (char)((0xff000000 & intNumber) >> 24);
+	result[1] = (char)((0x00ff0000 & intNumber) >> 16);
+	result[2] = (char)((0x0000ff00 & intNumber) >> 8);
+	result[3] = (char)((0x000000ff & intNumber));
 }
 
 int power2(int times) 
@@ -39,5 +38,29 @@ void setBitMap(char * bitMap, long position, bool flag)
 		}
 	}
 
-	bitMap[position / 8] = (which_byte & ((char)andByte)) + ((char)(0x01) << (7 - which_bit));
+	if (flag == 1)
+	{
+		bitMap[position / 8] = (which_byte & ((char)andByte)) + ((char)(0x01) << (7 - which_bit));
+	}
+	else
+	{
+		bitMap[position / 8] = (which_byte & ((char)andByte)) + ((char)(0x00) << (7 - which_bit));
+	}
+
+	
+}
+
+long getPhysicalAddress(int pageNumber, int pagePosition) 
+{
+	return (MAX_PAGE_NUM / 8) + (pageNumber - 1) * PAGE_SIZE + pagePosition;
+}
+
+int getPageNumber(long physicalAddress)
+{
+	return (physicalAddress - (MAX_PAGE_NUM / 8)) / PAGE_SIZE + 1;
+}
+
+int getPagePosition(long physicalAddress)
+{
+	return (physicalAddress - (MAX_PAGE_NUM / 8)) % PAGE_SIZE;
 }

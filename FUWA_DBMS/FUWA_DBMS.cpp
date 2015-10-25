@@ -75,7 +75,8 @@ int main()
 	//testDBFileManager();
 	//testHashMap();
 	//cout << sizeof(char) << endl;
-	testSetBitMap();
+	//testSetBitMap();
+	//cout << sizeof(int) + sizeof(char) + sizeof(char*) << endl;
 	printf("DBMS shut down!\n");
 	system("pause");
     return 0;

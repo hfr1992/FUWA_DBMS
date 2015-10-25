@@ -3,6 +3,12 @@
 #include <iostream>
 using namespace std;
 
+BitMapIterator::BitMapIterator()
+{
+	cout << "Can't call the BitMapIterator constructor without any parameter." << endl;
+	exit;
+}
+
 BitMapIterator::BitMapIterator(char * bMap, long size)
 {
 	bitMap = bMap;
@@ -34,4 +40,9 @@ bool BitMapIterator::getBitMap(long position)
 	char andByte = (char)(power2(7 - which_bit));
 
 	return (which_byte & andByte) >> (7 - which_bit);
+}
+
+long BitMapIterator::currentIndex()
+{
+	return currentPointer - 1;
 }

@@ -6,7 +6,7 @@ struct BufferUnit
 {
 	int pageNumber = -1;//from 1 to n
 	int flagSCH = 0;
-	char data[SIZE_PER_PAGE];
+	char data[PAGE_SIZE];
 };
 
 struct Buffer
@@ -18,9 +18,10 @@ class BufferManager
 {
 public:
 	static BufferManager * getInstance();
-	void read(char * data,long pageNumber, long from, long size);
-	void write(char * data, long pageNumber, long from, long size);
-	long findSpace(int spaceSize);
+	long findFreeSpace(int spaceSize);
+	long insertOneTuple(char * tuple, int size);
+	void selectOneTuple(char * tuple, int size, long position);
+	void deleteOneTuple(int size, long position);
 private:
 	static BufferManager * bufferManager;
 	long eliminatePointer;
@@ -29,8 +30,12 @@ private:
 	struct DB_FILE_Header dB_FILE_Header;
 	BufferManager();
 	~BufferManager();
+	void read(char * data, long pageNumber, long from, long size);
+	void write(char * data, long pageNumber, long from, long size);
 	long findPage(long pageNumber);
 	long exchangePages(long pageNumber);
 	void importOnePage(long pageNumber);
 	void exportOnePage(long pageNumber);
+	void setFileHeader(long position, bool flag);
+	bool isPageWritable(long pageNumber);
 };

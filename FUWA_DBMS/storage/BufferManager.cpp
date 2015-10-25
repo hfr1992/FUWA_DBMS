@@ -1,5 +1,6 @@
 #include "BufferManager.h"
 #include "DBFileManager.h"
+#include "BitMapIterator.h"
 
 BufferManager * BufferManager::bufferManager = 0;
 
@@ -31,7 +32,7 @@ long BufferManager::exchangePages(long pageNumber)
 void BufferManager::importOnePage(long pageNumber)
 {
 	DBFileManager * dBFileManager = DBFileManager::getInstance();
-	dBFileManager->read(buffer.bufferUnit[eliminatePointer].data, (pageNumber - 1)*(SIZE_PER_PAGE), SIZE_PER_PAGE);
+	dBFileManager->read(buffer.bufferUnit[eliminatePointer].data, (pageNumber - 1)*(PAGE_SIZE), PAGE_SIZE);
 	buffer.bufferUnit[eliminatePointer].flagSCH = 1;
 	buffer.bufferUnit[eliminatePointer].pageNumber = pageNumber;
 	bufferHashMap[pageNumber] = eliminatePointer;
@@ -41,7 +42,38 @@ void BufferManager::importOnePage(long pageNumber)
 void BufferManager::exportOnePage(long pageNumber)
 {
 	DBFileManager * dBFileManager = DBFileManager::getInstance();
-	dBFileManager->insert(buffer.bufferUnit[eliminatePointer].data, (pageNumber - 1)*(SIZE_PER_PAGE), SIZE_PER_PAGE);
+	dBFileManager->insert(buffer.bufferUnit[eliminatePointer].data, (pageNumber - 1)*(PAGE_SIZE), PAGE_SIZE);
+}
+
+void BufferManager::setFileHeader(long pageNumber, bool flag)
+{
+	setBitMap(dB_FILE_Header.bitMap, pageNumber - 1, flag);
+
+	DBFileManager * dBFileManager = DBFileManager::getInstance();
+	dBFileManager->setDBFileHeader(&dB_FILE_Header);
+}
+
+bool BufferManager::isPageWritable(long pageNumber)
+{
+	char temp[PAGE_SIZE];
+	read(temp, pageNumber, 0, PAGE_SIZE);
+	int freeSpace = 0;
+	for (int i = 0; i < PAGE_SIZE; i++)
+	{
+		if (temp[i] == '\0')
+		{
+			freeSpace++;
+		}
+		else
+		{
+			freeSpace = 0;
+		}
+		if (freeSpace >= 5 * sizeof(char))
+		{
+			return true;
+		}
+	}
+	return false;
 }
 
 long BufferManager::findPage(long pageNumber)
@@ -71,9 +103,64 @@ void BufferManager::write(char * data, long pageNumber, long from, long size)
 	bUnit.flagSCH = 1;
 }
 
-long BufferManager::findSpace(int spaceSize)
+long BufferManager::findFreeSpace(int spaceSize)
 {
-	return 0;
+	char temp[PAGE_SIZE];
+	BitMapIterator bmi(dB_FILE_Header.bitMap, MAX_PAGE_NUM / 8);
+	while (bmi.hasNext())
+	{
+		if (bmi.next() == 0) 
+		{
+			read(temp, (bmi.currentIndex() + 1), 0, PAGE_SIZE);
+			int freeSpace = 0;
+			for (int i = 0; i < PAGE_SIZE; i++)
+			{
+				if (temp[i] == '\0')
+				{
+					freeSpace++;
+				}
+				else
+				{
+					freeSpace = 0;
+				}
+				if (freeSpace == spaceSize)
+				{
+					return getPhysicalAddress(bmi.currentIndex() + 1, i - spaceSize + 1);
+				}
+			}
+		}
+	}
+	return -1;
+}
+
+long BufferManager::insertOneTuple(char * tuple, int size)
+{
+	long insertPosition = findFreeSpace(size);
+	write(tuple, getPageNumber(insertPosition), getPagePosition(insertPosition), size);
+	if (isPageWritable(getPageNumber(insertPosition)) == false)
+	{
+		setFileHeader(getPageNumber(insertPosition), 1);
+	}
+	return insertPosition;
+}
+
+void BufferManager::selectOneTuple(char * tuple, int size, long position)
+{
+	read(tuple, getPageNumber(position), getPagePosition(position), size);
+}
+
+void BufferManager::deleteOneTuple(int size, long position)
+{
+	char * temp = (char *)malloc( size * sizeof(char) );
+	for (int i = 0; i < size; i++)
+	{
+		temp[i] = '\0';
+	}
+	write(temp, getPageNumber(position), getPagePosition(position), size);
+
+	setFileHeader(getPageNumber(position), 0);
+
+	free(temp);
 }
 
 BufferManager::BufferManager() 
