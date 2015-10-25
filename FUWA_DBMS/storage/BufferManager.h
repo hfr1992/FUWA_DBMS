@@ -22,6 +22,7 @@ public:
 	long insertOneTuple(char * tuple, int size);
 	void selectOneTuple(char * tuple, int size, long position);
 	void deleteOneTuple(int size, long position);
+	void flush();
 private:
 	static BufferManager * bufferManager;
 	long eliminatePointer;

@@ -11,5 +11,6 @@ private:
 	char * bitMap;
 	long currentPointer;
 	long bitMapSize;
+	long currentPageNumber;
 	bool getBitMap(long position);
 };

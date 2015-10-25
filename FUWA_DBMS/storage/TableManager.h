@@ -10,9 +10,10 @@ class TableManager
 public:
 	TableManager();
 	~TableManager();
-	void insertOneTuple(char * tuple, int size);
+	long insertOneTuple(char * tuple, int size);
 	void selectOneTuple(char * tuple, int size, long position);
 	void deleteOneTuple(int size, long position);
+	void flush();
 //private:
 //	void createTestData(struct Table_1 * tuples);
 //	void deleteTestData(struct Table_1 * tuples);

@@ -7,6 +7,7 @@
 #include <iostream>
 #include "storage/DBFileManager.h"
 #include "storage/BitMapIterator.h"
+#include "storage/TableManager.h"
 #include <unordered_map>
 using namespace std;
 
@@ -77,6 +78,35 @@ int main()
 	//cout << sizeof(char) << endl;
 	//testSetBitMap();
 	//cout << sizeof(int) + sizeof(char) + sizeof(char*) << endl;
+
+	//-------------test-------------
+	char * oneTuple = "Hello world!";
+	char * secTuple = "Hello, DBMS!!";
+	TableManager * tableManager = new TableManager();
+	tableManager->insertOneTuple(oneTuple, strlen(oneTuple));
+	tableManager->insertOneTuple(secTuple, strlen(secTuple));
+	int position = tableManager->insertOneTuple(secTuple, strlen(secTuple));
+	cout << position << endl;
+
+	char result[13];
+	tableManager->selectOneTuple(result, strlen(secTuple), position);
+	for (int i = 0; i < 13; i++)
+	{
+		printf("%c", result[i]);
+	}
+	printf("\n");
+	tableManager->deleteOneTuple(strlen(secTuple), position);
+
+	char big_string[10000];
+	for (int i = 0; i < 10000; i++)
+	{
+		big_string[i] = 'A';
+	}
+	tableManager->insertOneTuple(big_string,strlen(big_string));
+
+	tableManager->flush();
+	//-------------test-------------
+
 	printf("DBMS shut down!\n");
 	system("pause");
     return 0;

@@ -1,12 +1,13 @@
 #include "BitMapIterator.h"
 #include "../Config.h"
+#include "DBFileManager.h"
 #include <iostream>
 using namespace std;
 
 BitMapIterator::BitMapIterator()
 {
 	cout << "Can't call the BitMapIterator constructor without any parameter." << endl;
-	exit;
+	exit(0);
 }
 
 BitMapIterator::BitMapIterator(char * bMap, long size)

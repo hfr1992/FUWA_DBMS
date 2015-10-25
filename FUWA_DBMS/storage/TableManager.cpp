@@ -1,11 +1,14 @@
 #include "TableManager.h"
 #include <stdlib.h>
 #include "BufferManager.h"
+#include <iostream>
+using namespace std;
 
 #define TEST_DATA_SIZE 2000
 
 TableManager::TableManager()
 {
+	cout << "Create TableManager." << endl;
 	//struct Table_1 tuples[TEST_DATA_SIZE];
 	//createTestData(tuples);
 	//
@@ -47,11 +50,14 @@ TableManager::~TableManager()
 {
 }
 
-void TableManager::insertOneTuple(char * tuple, int size)
+long TableManager::insertOneTuple(char * tuple, int size)
 {
 	BufferManager * bufferManager = BufferManager::getInstance();
 	long insertPosition = bufferManager->insertOneTuple(tuple, size);
+	cout << "Insert one tuple with size:" << size << endl;
 	//to insert the record into index
+
+	return insertPosition;
 }
 
 void TableManager::selectOneTuple(char * tuple, int size, long position)
@@ -65,6 +71,11 @@ void TableManager::deleteOneTuple(int size, long position)
 	BufferManager * bufferManager = BufferManager::getInstance();
 	bufferManager->deleteOneTuple(size, position);
 	//to delete the record from index
+}
+
+void TableManager::flush()
+{
+	BufferManager::getInstance()->flush();
 }
 
 //void TableManager::createTestData(Table_1 * tuples)

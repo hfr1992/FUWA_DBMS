@@ -57,10 +57,10 @@ long getPhysicalAddress(int pageNumber, int pagePosition)
 
 int getPageNumber(long physicalAddress)
 {
-	return (physicalAddress - (MAX_PAGE_NUM / 8)) / PAGE_SIZE + 1;
+	return (((physicalAddress - (MAX_PAGE_NUM / 8)) / (PAGE_SIZE)) + 1);
 }
 
 int getPagePosition(long physicalAddress)
 {
-	return (physicalAddress - (MAX_PAGE_NUM / 8)) % PAGE_SIZE;
+	return ((physicalAddress - (MAX_PAGE_NUM / 8)) % (PAGE_SIZE));
 }

@@ -1,27 +1,8 @@
-﻿生成启动时间为 2015/10/25 15:21:57。
+﻿生成启动时间为 2015/10/26 2:48:55。
      1>项目“D:\program\cpp\FUWA_DBMS\FUWA_DBMS\FUWA_DBMS.vcxproj”在节点 2 上(Build 个目标)。
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Debug\\" /Fd"Debug\vc140.pdb" /Gd /TP /analyze- /errorReport:prompt Config.cpp FUWA_DBMS.cpp storage\BitMapIterator.cpp storage\BufferManager.cpp storage\DBFileManager.cpp storage\DataFileManager.cpp storage\DictionaryFileManager.cpp storage\IndexFileManager.cpp storage\TableManager.cpp
-         TableManager.cpp
-         DBFileManager.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Debug\\" /Fd"Debug\vc140.pdb" /Gd /TP /analyze- /errorReport:prompt FUWA_DBMS.cpp
          FUWA_DBMS.cpp
-         Config.cpp
-         正在生成代码...
-         正在编译...
-         IndexFileManager.cpp
-         DictionaryFileManager.cpp
-         DataFileManager.cpp
-     1>d:\program\cpp\fuwa_dbms\fuwa_dbms\storage\datafilemanager.cpp(8): warning C4996: 'access': The POSIX name for this item is deprecated. Instead, use the ISO C and C++ conformant name: _access. See online help for details.
-         c:\program files (x86)\windows kits\10\include\10.0.10150.0\ucrt\corecrt_io.h(439): note: 参见“access”的声明
-     1>d:\program\cpp\fuwa_dbms\fuwa_dbms\storage\datafilemanager.cpp(10): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-         c:\program files (x86)\windows kits\10\include\10.0.10150.0\ucrt\stdio.h(205): note: 参见“fopen”的声明
-     1>d:\program\cpp\fuwa_dbms\fuwa_dbms\storage\datafilemanager.cpp(12): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-         c:\program files (x86)\windows kits\10\include\10.0.10150.0\ucrt\stdio.h(205): note: 参见“fopen”的声明
-         BufferManager.cpp
-         BitMapIterator.cpp
-     1>d:\program\cpp\fuwa_dbms\fuwa_dbms\storage\bitmapiterator.cpp(9): warning C4551: 缺少参数列表的函数调用
-     1>d:\program\cpp\fuwa_dbms\fuwa_dbms\storage\bitmapiterator.cpp(42): warning C4800: “int”: 将值强制为布尔值“true”或“false”(性能警告)
-         正在生成代码...
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"D:\program\cpp\FUWA_DBMS\Debug\FUWA_DBMS.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /Debug /PDB:"D:\program\cpp\FUWA_DBMS\Debug\FUWA_DBMS.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\program\cpp\FUWA_DBMS\Debug\FUWA_DBMS.lib" /MACHINE:X86 Debug\Config.obj
          Debug\FUWA_DBMS.obj
@@ -38,4 +19,4 @@
 
 已成功生成。
 
-已用时间 00:00:03.44
+已用时间 00:00:00.71
