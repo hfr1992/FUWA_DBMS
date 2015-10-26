@@ -100,15 +100,15 @@ int main()
 	//delete s3
 	tableManager->deleteOneTuple(strlen(secTuple), position);
 	//insert big string s5
-	char big_string[10000];
-	for (int i = 0; i < 10000; i++)
+	char big_string[20000];
+	for (int i = 0; i < 20000; i++)
 	{
 		big_string[i] = 'A';
 	}
-	long bs_position = tableManager->insertOneTuple(big_string, 10000);
+	long bs_position = tableManager->insertOneTuple(big_string, 20000);
 
 	//delete s5
-	tableManager->deleteOneTuple(10000, bs_position);
+	//tableManager->deleteOneTuple(20000, bs_position);
 
 	tableManager->flush();
 	//-------------test-------------

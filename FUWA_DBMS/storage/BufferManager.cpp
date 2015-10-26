@@ -303,6 +303,7 @@ BufferManager::BufferManager()
 	for (long i = 0; i < times; i++)
 	{
 		importOnePage(i+1);
+		eliminatePointer = (eliminatePointer + 1) % (BUFFER_SIZE);
 	}
 
 	//Import the header of the DB File (BitMap)
