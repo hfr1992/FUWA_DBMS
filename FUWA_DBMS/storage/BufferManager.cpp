@@ -164,6 +164,7 @@ long BufferManager::insertOneTuple(char * tuple, int size)
 
 	cout << "----------------Finding free space----------------" << endl;
 	long insertPosition = findFreeSpace(size);
+	long returnPosition = insertPosition;
 	if (insertPosition == -1)
 	{
 		long fileLength = dBFileManager->length();
@@ -216,7 +217,7 @@ long BufferManager::insertOneTuple(char * tuple, int size)
 		if (isPageWritable(getPageNumber(insertPosition)) == false) setFileHeader(getPageNumber(insertPosition), 1);
 	}
 	cout << "----------------Inserting----------------" << endl;
-	return insertPosition;
+	return returnPosition;
 }
 
 void BufferManager::selectOneTuple(char * tuple, int size, long position)
@@ -226,6 +227,7 @@ void BufferManager::selectOneTuple(char * tuple, int size, long position)
 
 void BufferManager::deleteOneTuple(int size, long position)
 {
+	cout << "----------------Deleting----------------" << endl;
 	if (getFreeSpaceInCurrentPage(position) > size)
 	{
 		char * temp = (char *)malloc(size * sizeof(char));
@@ -238,12 +240,14 @@ void BufferManager::deleteOneTuple(int size, long position)
 	{
 		//More than one segment
 		//First segment
-		char * temp = (char *)malloc((PAGE_SIZE - getPagePosition(position)) * sizeof(char));
-		for (int i = 0; i < (PAGE_SIZE - getPagePosition(position)); i++) temp[i] = '\0';
-		write(temp, getPageNumber(position), getPagePosition(position), (getFreeSpaceInCurrentPage(position)));
+		int firstSegmentSize = getFreeSpaceInCurrentPage(position);
+		char * temp = (char *)malloc(firstSegmentSize * sizeof(char));
+		for (int i = 0; i < firstSegmentSize; i++) temp[i] = '\0';
+		cout << "Delete segment. Start PageNumber: " << getPageNumber(position) << " PagePosition: " << getPagePosition(position) << " Size: " << firstSegmentSize << endl;
+		write(temp, getPageNumber(position), getPagePosition(position), firstSegmentSize);
 		setFileHeader(getPageNumber(position), 0);
-		size -= (PAGE_SIZE - getPagePosition(position));
-		position += (PAGE_SIZE - getPagePosition(position));
+		size -= firstSegmentSize;
+		position += firstSegmentSize;
 		free(temp);
 
 		//Second to last second segments
@@ -252,6 +256,7 @@ void BufferManager::deleteOneTuple(int size, long position)
 		while (size > PAGE_SIZE)
 		{
 			write(temp, getPageNumber(position), getPagePosition(position), PAGE_SIZE);
+			cout << "Delete segment. Start PageNumber: " << getPageNumber(position) << " PagePosition: " << getPagePosition(position) << " Size: " << PAGE_SIZE << endl;
 			setFileHeader(getPageNumber(position), 0);
 			size -= PAGE_SIZE;
 			position += PAGE_SIZE;
@@ -262,10 +267,12 @@ void BufferManager::deleteOneTuple(int size, long position)
 		temp = (char *)malloc(size * sizeof(char));
 		for (int i = 0; i < size; i++) temp[i] = '\0';
 		write(temp, getPageNumber(position), getPagePosition(position), size);
+		cout << "Delete segment. Start PageNumber: " << getPageNumber(position) << " PagePosition: " << getPagePosition(position) << " Size: " << size << endl;
 		setFileHeader(getPageNumber(position), 0);
 		free(temp);
 
 	}
+	cout << "----------------Deleting----------------" << endl;
 
 }
 
@@ -289,7 +296,7 @@ BufferManager::BufferManager()
 	eliminatePointer = 0;
 
 	long DBFileLength = dBFileManager->length();
-	long times = ( DBFileLength - (MAX_PAGE_NUM / 8) * sizeof(char) ) / PAGE_SIZE;
+	long times = ( DBFileLength - (MAX_PAGE_NUM / 8) ) / (PAGE_SIZE);
 
 	cout << "The length of the DB File is:'" << DBFileLength << "' bytes, split into:'" << times << "' pages." << endl;
 

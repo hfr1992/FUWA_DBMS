@@ -99,18 +99,16 @@ int main()
 	printf("\n");
 	//delete s3
 	tableManager->deleteOneTuple(strlen(secTuple), position);
-	//insert s4
-	long bs_position = tableManager->insertOneTuple(oneTuple, strlen(oneTuple));
-	//insert bit string s5
-	char big_string[4059];
-	for (int i = 0; i < 4059; i++)
+	//insert big string s5
+	char big_string[10000];
+	for (int i = 0; i < 10000; i++)
 	{
 		big_string[i] = 'A';
 	}
-	tableManager->insertOneTuple(big_string, 4059);
+	long bs_position = tableManager->insertOneTuple(big_string, 10000);
 
-	//delete s3
-	tableManager->deleteOneTuple(4059, bs_position);
+	//delete s5
+	tableManager->deleteOneTuple(10000, bs_position);
 
 	tableManager->flush();
 	//-------------test-------------
