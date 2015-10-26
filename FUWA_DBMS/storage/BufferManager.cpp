@@ -222,7 +222,31 @@ long BufferManager::insertOneTuple(char * tuple, int size)
 
 void BufferManager::selectOneTuple(char * tuple, int size, long position)
 {
-	read(tuple, getPageNumber(position), getPagePosition(position), size);
+	cout << "----------------Selecting----------------" << endl;
+	if (getFreeSpaceInCurrentPage(position) > size)
+	{
+		read(tuple, getPageNumber(position), getPagePosition(position), size);
+	}
+	else
+	{
+		int firstSegmentSize = getFreeSpaceInCurrentPage(position);
+		read(tuple, getPageNumber(position), getPagePosition(position), firstSegmentSize);
+		size -= firstSegmentSize;
+		position += firstSegmentSize;
+		tuple += firstSegmentSize;
+
+		while (size > PAGE_SIZE)
+		{
+			int firstSegmentSize = getFreeSpaceInCurrentPage(position);
+			read(tuple, getPageNumber(position), getPagePosition(position), firstSegmentSize);
+			size -= firstSegmentSize;
+			position += firstSegmentSize;
+			tuple += firstSegmentSize;
+		}
+
+		read(tuple, getPageNumber(position), getPagePosition(position), size);
+	}
+	cout << "----------------Selecting----------------" << endl;
 }
 
 void BufferManager::deleteOneTuple(int size, long position)
