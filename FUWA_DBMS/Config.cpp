@@ -40,14 +40,18 @@ void setBitMap(char * bitMap, long position, bool flag)
 
 	if (flag == 1)
 	{
+		//char temp = (which_byte & ((char)andByte)) + ((char)(0x01) << (7 - which_bit));
+		//memcpy(&(bitMap[position / 8]), &temp, 1);
 		bitMap[position / 8] = (which_byte & ((char)andByte)) + ((char)(0x01) << (7 - which_bit));
 	}
 	else
 	{
+		//char temp = (which_byte & ((char)andByte)) + ((char)(0x00) << (7 - which_bit));
+		//memcpy(&(bitMap[position / 8]), &temp, 1);
 		bitMap[position / 8] = (which_byte & ((char)andByte)) + ((char)(0x00) << (7 - which_bit));
 	}
 
-	
+	cout << "BitMap modified byte: " << (int)bitMap[position / 8] << endl;
 }
 
 long getPhysicalAddress(int pageNumber, int pagePosition) 
@@ -63,4 +67,10 @@ int getPageNumber(long physicalAddress)
 int getPagePosition(long physicalAddress)
 {
 	return ((physicalAddress - (MAX_PAGE_NUM / 8)) % (PAGE_SIZE));
+}
+
+int getFreeSpaceInCurrentPage(long physicalAddress) 
+{
+	int currentStart = (getPageNumber(physicalAddress) - 1)*PAGE_SIZE + (MAX_PAGE_NUM / 8);
+	return PAGE_SIZE - (physicalAddress - currentStart);
 }

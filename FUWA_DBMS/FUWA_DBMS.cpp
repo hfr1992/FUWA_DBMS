@@ -83,11 +83,13 @@ int main()
 	char * oneTuple = "Hello world!";
 	char * secTuple = "Hello, DBMS!!";
 	TableManager * tableManager = new TableManager();
+	//insert s1
 	tableManager->insertOneTuple(oneTuple, strlen(oneTuple));
+	//insert s2
 	tableManager->insertOneTuple(secTuple, strlen(secTuple));
-	int position = tableManager->insertOneTuple(secTuple, strlen(secTuple));
-	cout << position << endl;
-
+	//insert s3
+	long position = tableManager->insertOneTuple(secTuple, strlen(secTuple));
+	//select s3
 	char result[13];
 	tableManager->selectOneTuple(result, strlen(secTuple), position);
 	for (int i = 0; i < 13; i++)
@@ -95,14 +97,20 @@ int main()
 		printf("%c", result[i]);
 	}
 	printf("\n");
+	//delete s3
 	tableManager->deleteOneTuple(strlen(secTuple), position);
-
-	char big_string[10000];
-	for (int i = 0; i < 10000; i++)
+	//insert s4
+	long bs_position = tableManager->insertOneTuple(oneTuple, strlen(oneTuple));
+	//insert bit string s5
+	char big_string[4059];
+	for (int i = 0; i < 4059; i++)
 	{
 		big_string[i] = 'A';
 	}
-	tableManager->insertOneTuple(big_string,strlen(big_string));
+	tableManager->insertOneTuple(big_string, 4059);
+
+	//delete s3
+	tableManager->deleteOneTuple(4059, bs_position);
 
 	tableManager->flush();
 	//-------------test-------------

@@ -66,6 +66,7 @@ void BufferManager::exportOnePage(long pageNumber)
 
 void BufferManager::setFileHeader(long pageNumber, bool flag)
 {
+	cout << "Update position: " << (pageNumber-1) << " in BitMap of DB File with flag: " << flag << "." << endl;
 	setBitMap(dB_FILE_Header.bitMap, pageNumber - 1, flag);
 
 	DBFileManager * dBFileManager = DBFileManager::getInstance();
@@ -74,6 +75,7 @@ void BufferManager::setFileHeader(long pageNumber, bool flag)
 
 bool BufferManager::isPageWritable(long pageNumber)
 {
+	cout << "Check if the page is available......" << endl;
 	char temp[PAGE_SIZE];
 	read(temp, pageNumber, 0, PAGE_SIZE);
 	int freeSpace = 0;
@@ -100,7 +102,7 @@ long BufferManager::findPage(long pageNumber)
 	long pagePosition = bufferHashMap[pageNumber] - 1;
 	if (pagePosition >= 0) 
 	{
-		cout << "The page " << pageNumber << " required is in the buffer, pagePosition: " << pagePosition << "." << endl;
+		cout << "The page " << pageNumber << " required is in the buffer, pagePosition (in BufferUnit): " << pagePosition << "." << endl;
 		return pagePosition;
 	}
 	else
@@ -112,7 +114,7 @@ long BufferManager::findPage(long pageNumber)
 
 void BufferManager::read(char * data, long pageNumber, long from, long size)
 {
-	cout << "Read from page:" << pageNumber << " position:" << from << endl;
+	cout << "Read from page: " << pageNumber << " position: " << from << " size: " << size << endl;
 	struct BufferUnit * bUnit = &(buffer.bufferUnit[findPage(pageNumber)]);
 	memcpy(data, bUnit->data + from, size);
 	bUnit->flagSCH = 1;
@@ -120,7 +122,7 @@ void BufferManager::read(char * data, long pageNumber, long from, long size)
 
 void BufferManager::write(char * data, long pageNumber, long from, long size)
 {
-	cout << "Write to page:" << pageNumber << " position:" << from << endl;
+	cout << "Write to page: " << pageNumber << " position: " << from << " size: " << size << endl;
 	struct BufferUnit * bUnit = &(buffer.bufferUnit[findPage(pageNumber)]);
 	memcpy(bUnit->data + from, data, size);
 	bUnit->flagSCH = 1;
@@ -178,10 +180,10 @@ long BufferManager::insertOneTuple(char * tuple, int size)
 	cout << "Find the enough free space from position:'" << insertPosition << "'." << endl;
 	cout << "----------------Finding free space----------------" << endl;
 	cout << "----------------Inserting----------------" << endl;
-	if (BUFFER_SIZE - getPagePosition(insertPosition) > size)
+	if (getFreeSpaceInCurrentPage(insertPosition) > size)
 	{
 		//Just one segment
-		cout << "Just one segment. PageNumber: " << getPageNumber(insertPosition) << " PagePosition: " << getPagePosition(insertPosition) << " Size: " << size <<" BitMap: "<< isPageWritable(getPageNumber(insertPosition)) <<"."<< endl;
+		cout << "Just one segment. PageNumber: " << getPageNumber(insertPosition) << " PagePosition: " << getPagePosition(insertPosition) << " Size: " << (getFreeSpaceInCurrentPage(insertPosition)) << "." << endl;
 		write(tuple, getPageNumber(insertPosition), getPagePosition(insertPosition), size);
 		if (isPageWritable(getPageNumber(insertPosition)) == false) setFileHeader(getPageNumber(insertPosition), 1);
 	}
@@ -189,23 +191,27 @@ long BufferManager::insertOneTuple(char * tuple, int size)
 	{
 		//More than one segment
 		//First segment
-		write(tuple, getPageNumber(insertPosition), getPagePosition(insertPosition), BUFFER_SIZE - getPagePosition(insertPosition));
+		cout << "More than one segment. " << endl;
+		cout<<"Insert first segment. Start PageNumber: " << getPageNumber(insertPosition) << " PagePosition: " << getPagePosition(insertPosition) << " Size: " << getFreeSpaceInCurrentPage(insertPosition) << "." << endl;
+		write(tuple, getPageNumber(insertPosition), getPagePosition(insertPosition), getFreeSpaceInCurrentPage(insertPosition));
 		if (isPageWritable(getPageNumber(insertPosition)) == false) setFileHeader(getPageNumber(insertPosition), 1);
-		size -= (BUFFER_SIZE - getPagePosition(insertPosition));
-		tuple += (BUFFER_SIZE - getPagePosition(insertPosition));
-		insertPosition += (BUFFER_SIZE - getPagePosition(insertPosition));
+		size -= (PAGE_SIZE - getPagePosition(insertPosition));
+		tuple += (PAGE_SIZE - getPagePosition(insertPosition));
+		insertPosition += (PAGE_SIZE - getPagePosition(insertPosition));
 
 		//Second to last second segments
-		while (size > BUFFER_SIZE) 
+		while (size > PAGE_SIZE)
 		{
-			write(tuple, getPageNumber(insertPosition), getPagePosition(insertPosition), BUFFER_SIZE);
+			cout << "Insert segment. Start PageNumber: " << getPageNumber(insertPosition) << " PagePosition: " << getPagePosition(insertPosition) << " Size: " << PAGE_SIZE << endl;
+			write(tuple, getPageNumber(insertPosition), getPagePosition(insertPosition), PAGE_SIZE);
 			setFileHeader(getPageNumber(insertPosition), 1);
-			size -= BUFFER_SIZE;
-			tuple += BUFFER_SIZE;
-			insertPosition += BUFFER_SIZE;
+			size -= PAGE_SIZE;
+			tuple += PAGE_SIZE;
+			insertPosition += PAGE_SIZE;
 		}
 
 		//last segment
+		cout << "Insert segment. Start PageNumber: " << getPageNumber(insertPosition) << " PagePosition: " << getPagePosition(insertPosition) << " Size: " << size << endl;
 		write(tuple, getPageNumber(insertPosition), getPagePosition(insertPosition), size);
 		if (isPageWritable(getPageNumber(insertPosition)) == false) setFileHeader(getPageNumber(insertPosition), 1);
 	}
@@ -220,7 +226,7 @@ void BufferManager::selectOneTuple(char * tuple, int size, long position)
 
 void BufferManager::deleteOneTuple(int size, long position)
 {
-	if (BUFFER_SIZE - getPagePosition(position) > size)
+	if (getFreeSpaceInCurrentPage(position) > size)
 	{
 		char * temp = (char *)malloc(size * sizeof(char));
 		for (int i = 0; i < size; i++) temp[i] = '\0';
@@ -232,23 +238,23 @@ void BufferManager::deleteOneTuple(int size, long position)
 	{
 		//More than one segment
 		//First segment
-		char * temp = (char *)malloc((BUFFER_SIZE - getPagePosition(position)) * sizeof(char));
-		for (int i = 0; i < (BUFFER_SIZE - getPagePosition(position)); i++) temp[i] = '\0';
-		write(temp, getPageNumber(position), getPagePosition(position), (BUFFER_SIZE - getPagePosition(position)));
+		char * temp = (char *)malloc((PAGE_SIZE - getPagePosition(position)) * sizeof(char));
+		for (int i = 0; i < (PAGE_SIZE - getPagePosition(position)); i++) temp[i] = '\0';
+		write(temp, getPageNumber(position), getPagePosition(position), (getFreeSpaceInCurrentPage(position)));
 		setFileHeader(getPageNumber(position), 0);
-		size -= (BUFFER_SIZE - getPagePosition(position));
-		position += (BUFFER_SIZE - getPagePosition(position));
+		size -= (PAGE_SIZE - getPagePosition(position));
+		position += (PAGE_SIZE - getPagePosition(position));
 		free(temp);
 
 		//Second to last second segments
-		temp = (char *)malloc(BUFFER_SIZE * sizeof(char));
-		for (int i = 0; i < BUFFER_SIZE; i++) temp[i] = '\0';
-		while (size > BUFFER_SIZE)
+		temp = (char *)malloc(PAGE_SIZE * sizeof(char));
+		for (int i = 0; i < PAGE_SIZE; i++) temp[i] = '\0';
+		while (size > PAGE_SIZE)
 		{
-			write(temp, getPageNumber(position), getPagePosition(position), BUFFER_SIZE);
+			write(temp, getPageNumber(position), getPagePosition(position), PAGE_SIZE);
 			setFileHeader(getPageNumber(position), 0);
-			size -= BUFFER_SIZE;
-			position += BUFFER_SIZE;
+			size -= PAGE_SIZE;
+			position += PAGE_SIZE;
 		}
 		free(temp);
 
@@ -283,7 +289,7 @@ BufferManager::BufferManager()
 	eliminatePointer = 0;
 
 	long DBFileLength = dBFileManager->length();
-	long times = ( DBFileLength - (MAX_PAGE_NUM / 8) * sizeof(char) ) / BUFFER_SIZE;
+	long times = ( DBFileLength - (MAX_PAGE_NUM / 8) * sizeof(char) ) / PAGE_SIZE;
 
 	cout << "The length of the DB File is:'" << DBFileLength << "' bytes, split into:'" << times << "' pages." << endl;
 

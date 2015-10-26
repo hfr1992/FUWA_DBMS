@@ -25,3 +25,4 @@ void setBitMap(char * bitMap, long position, bool flag);
 long getPhysicalAddress(int pageNumber, int pagePosition);
 int getPageNumber(long physicalAddress);
 int getPagePosition(long physicalAddress);
+int getFreeSpaceInCurrentPage(long physicalAddress);
