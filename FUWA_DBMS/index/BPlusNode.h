@@ -6,12 +6,12 @@ enum NODE_TYPE{INTERNAL,LEAF}; //结点类型为：内部结点、叶子节点
 enum SIBLING_DIRECTION{LEFT,RIGHT}; //兄弟节点有：左兄弟、右兄弟
 typedef long KeyType; //键类型
 typedef long DataType; //值类型
-const int HALF_ORDER = 3; //树的阶为2*HALF_ORDER=n
-const int MIN_KEY = HALF_ORDER - 1; //每个结点的最小键个数
-const int MAX_KEY = 2 * HALF_ORDER - 1; //每个结点的最大键个数
+const int ORDER = 7; //树的阶为ORDER=n
+const int MIN_KEY = ORDER/2; //每个结点的最小键个数
+const int MAX_KEY = ORDER; //每个结点的最大键个数
 const int MIN_CHILD = MIN_KEY + 1; //最小孩子结点个数
 const int MAX_CHILD = MAX_KEY + 1; //最大孩子结点个数
-const int MIN_LEAF = MIN_KEY; //最小叶子结点的键值对个数
+const int MIN_LEAF = (ORDER+1)/2; //最小叶子结点的键值对个数
 const int MAX_LEAF = MAX_KEY; //最大叶子结点的键值对个数
 
 /*定义基本结点类*/

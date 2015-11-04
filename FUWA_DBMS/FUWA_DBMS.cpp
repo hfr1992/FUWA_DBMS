@@ -138,7 +138,7 @@ int main()
 	cout << y << endl;
 	//bPlusTree->insert(500, 500);
 	//bPlusTree->insert(320, 320);
-	bPlusTree->printTree();
+	//bPlusTree->printTree();
 	bPlusTree->printData();
 
 
