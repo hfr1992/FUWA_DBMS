@@ -146,6 +146,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Config.h" />
+    <ClInclude Include="index\BPlusNode.h" />
+    <ClInclude Include="index\BPlusTree.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="storage\BitMapIterator.h" />
     <ClInclude Include="storage\BufferManager.h" />
@@ -159,6 +161,8 @@
   <ItemGroup>
     <ClCompile Include="Config.cpp" />
     <ClCompile Include="FUWA_DBMS.cpp" />
+    <ClCompile Include="index\BPlusNode.cpp" />
+    <ClCompile Include="index\BPlusTree.cpp" />
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="storage\BitMapIterator.cpp" />
     <ClCompile Include="storage\BufferManager.cpp" />

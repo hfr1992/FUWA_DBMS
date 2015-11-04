@@ -5,9 +5,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
+#include <time.h>
 #include "storage/DBFileManager.h"
 #include "storage/BitMapIterator.h"
 #include "storage/TableManager.h"
+#include "Index/BPlusNode.h"
+#include "Index/BPlusTree.h"
 #include <unordered_map>
 using namespace std;
 
@@ -114,6 +117,32 @@ int main()
 	//-------------test-------------
 
 	printf("DBMS shut down!\n");
+
+	cout << "The B+ Tree start!" << endl;
+	BPlusTree* bPlusTree = new BPlusTree();
+	bPlusTree->printTree();
+	int key, pos;
+	srand((unsigned)time(NULL));
+	for (int i = 0; i < 100; i++) {
+		//key = rand();
+		//pos = rand();
+		key = i;
+		pos = i ;
+		bPlusTree->insert(key, pos);
+	}
+	bool x = bPlusTree->search(300);
+	cout << x << endl;
+    //bool z=bPlusTree->remove(60);
+	//cout << z << endl;
+	bool y = bPlusTree->search(60);
+	cout << y << endl;
+	//bPlusTree->insert(500, 500);
+	//bPlusTree->insert(320, 320);
+	bPlusTree->printTree();
+	bPlusTree->printData();
+
+
+
 	system("pause");
     return 0;
 }

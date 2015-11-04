@@ -19,6 +19,12 @@
     <Filter Include="头文件\storage">
       <UniqueIdentifier>{6805ce75-6fd3-4761-9489-480dcab510b0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="源文件\index">
+      <UniqueIdentifier>{6958c01b-eb2b-441a-8098-be06c1b91d34}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="头文件\index">
+      <UniqueIdentifier>{c0db21d1-9a45-4589-b0c3-42024c5b5b19}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -54,12 +60,15 @@
     <ClInclude Include="storage\BitMapIterator.h">
       <Filter>头文件\storage</Filter>
     </ClInclude>
+    <ClInclude Include="index\BPlusNode.h">
+      <Filter>头文件\index</Filter>
+    </ClInclude>
+    <ClInclude Include="index\BPlusTree.h">
+      <Filter>头文件\index</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="FUWA_DBMS.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="storage\DataFileManager.cpp">
@@ -85,6 +94,15 @@
     </ClCompile>
     <ClCompile Include="storage\BitMapIterator.cpp">
       <Filter>源文件\storage</Filter>
+    </ClCompile>
+    <ClCompile Include="index\BPlusNode.cpp">
+      <Filter>源文件\index</Filter>
+    </ClCompile>
+    <ClCompile Include="index\BPlusTree.cpp">
+      <Filter>源文件\index</Filter>
+    </ClCompile>
+    <ClCompile Include="FUWA_DBMS.cpp">
+      <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
