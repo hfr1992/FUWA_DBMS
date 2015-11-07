@@ -1,7 +1,10 @@
 #include "BPlusTree.h"
+#include "../storage/IndexFileManager.h"
 #include <iostream>
 #include <algorithm>
 using namespace std;
+
+BPlusTree * BPlusTree::bPlusTree = 0;
 
 BPlusTree::BPlusTree() {
 	m_Root = NULL;
@@ -10,6 +13,20 @@ BPlusTree::BPlusTree() {
 
 BPlusTree::~BPlusTree() {
 	clear();
+}
+
+BPlusTree * BPlusTree::getInstance()
+{
+	if (bPlusTree == 0) 
+	{
+		bPlusTree = new BPlusTree();
+
+		/*bPlusTree->readFromFile();
+		cout << "Print B+ Tree when the index is started: " << endl;
+		bPlusTree->printTree();
+		bPlusTree->printData();*/
+	}
+	return bPlusTree;
 }
 
 bool BPlusTree::insert(KeyType key, const DataType &data) {
@@ -390,4 +407,209 @@ void BPlusTree::printData() const {
 		itr = itr->getRightSibling();
 	}
 	//cout << endl;
+}
+
+void BPlusTree::writeToFile() const
+{
+	queue<FatherNode*> nodeQueue;
+	nodeQueue.push(m_Root);
+	FatherNode* temp;
+
+	IndexFileManager * indexFileManager = IndexFileManager::getInstance();
+	//indexFileManager->deleteIndexFile();
+
+	while (!nodeQueue.empty())
+	{
+		temp = nodeQueue.front();
+		nodeQueue.pop();
+
+		if (temp->getType() == LEAF)
+		{
+			int type = temp->getType();
+			indexFileManager->appendBytes(&type, sizeof(int));
+
+			int keyNum = temp->getKeyNum();
+			indexFileManager->appendBytes(&keyNum, sizeof(int));
+
+			long keyValue;
+			for (int i = 0; i < MAX_KEY; i++)
+			{
+				keyValue = temp->getKeyValue(i);
+				indexFileManager->appendBytes(&keyValue, sizeof(long));
+			}
+
+			//LeafNode* left = ((LeafNode*)temp)->getLeftSibling();
+			//indexFileManager->appendBytes(&left, sizeof(LeafNode*));
+
+			//LeafNode* right = ((LeafNode*)temp)->getRightSibling();
+			//indexFileManager->appendBytes(&right, sizeof(LeafNode*));
+
+			long data;
+			for (int i = 0; i < MAX_LEAF; i++)
+			{
+				data = ((LeafNode*)temp)->getData(i);
+				indexFileManager->appendBytes(&data, sizeof(long));
+			}
+		}
+		else
+		{
+			int type = temp->getType();
+			indexFileManager->appendBytes(&type, sizeof(int));
+
+			int keyNum = temp->getKeyNum();
+			indexFileManager->appendBytes(&keyNum, sizeof(int));
+
+			long keyValue;
+			for (int i = 0; i < MAX_KEY; i++)
+			{
+				keyValue = temp->getKeyValue(i);
+				indexFileManager->appendBytes(&keyValue, sizeof(long));
+			}
+
+			//FatherNode* child;
+			//for (int i = 0; i < MAX_CHILD; i++)
+			//{
+			//	child = ((InternalNode*)temp)->getChild(i);
+			//	indexFileManager->appendBytes(&child, sizeof(FatherNode*));
+
+			//}
+
+			for (int i = 0; i < ((InternalNode*)temp)->getKeyNum(); i++)
+			{
+				nodeQueue.push(((InternalNode*)temp)->getChild(i));
+			}
+			nodeQueue.push(((InternalNode*)temp)->getChild(((InternalNode*)temp)->getKeyNum()));
+		}
+	}
+}
+
+void BPlusTree::readFromFile()
+{
+	queue<InternalNode*> lastLevelNodes;
+
+	LeafNode* lastNode = 0;
+
+	IndexFileManager * indexFileManager = IndexFileManager::getInstance();
+
+	if (indexFileManager->length() <= 0)
+	{
+		return;
+	}
+
+	long cur_pos = 0;
+	int curEmptyChild = 0;
+
+	int type;
+	indexFileManager->read(&type, cur_pos, sizeof(int));
+	cur_pos += sizeof(int);
+
+	if (type == LEAF)
+	{
+		m_Root = new LeafNode();
+		createLeafNode((LeafNode*)m_Root, &cur_pos, &lastNode);
+		
+	}
+	else
+	{
+		m_Root = new InternalNode();
+		createInternalNode((InternalNode*)m_Root, &cur_pos);
+		lastLevelNodes.push((InternalNode*)m_Root);
+		curEmptyChild = m_Root->getKeyNum();
+	}
+
+	while (!lastLevelNodes.empty())
+	{
+		indexFileManager->read(&type, cur_pos, sizeof(int));
+		cur_pos += sizeof(int);
+
+		FatherNode * newNode;
+
+		if (type == LEAF)
+		{
+			newNode = new LeafNode();
+			createLeafNode((LeafNode*)newNode, &cur_pos, &lastNode);
+		}
+		else
+		{
+			newNode = new InternalNode();
+			createInternalNode((InternalNode*)newNode, &cur_pos);
+			lastLevelNodes.push((InternalNode*)newNode);
+		}
+
+		lastLevelNodes.front()->setChild(lastLevelNodes.front()->getKeyNum() - curEmptyChild, newNode);
+		curEmptyChild--;
+
+		if (curEmptyChild < 0)
+		{
+			lastLevelNodes.pop();
+			if (!lastLevelNodes.empty())
+			{
+				curEmptyChild = lastLevelNodes.front()->getKeyNum();
+			}
+		}
+	}
+}
+
+void BPlusTree::createInternalNode(InternalNode* internalNode, long* cur_pos)
+{
+	IndexFileManager * indexFileManager = IndexFileManager::getInstance();
+
+	internalNode->setType(INTERNAL);
+
+	int keyNum;
+	indexFileManager->read(&keyNum, *cur_pos, sizeof(int));
+	*cur_pos += sizeof(int);
+	internalNode->setKeyNum(keyNum);
+
+	long keyValue;
+	for (int i = 0; i < MAX_KEY; i++)
+	{
+		indexFileManager->read(&keyValue, *cur_pos, sizeof(long));
+		internalNode->setKeyValue(i, keyValue);
+		*cur_pos += sizeof(long);
+	}
+}
+
+void BPlusTree::createLeafNode(LeafNode* leafNode, long* cur_pos, LeafNode** lastNode)
+{
+	IndexFileManager * indexFileManager = IndexFileManager::getInstance();
+
+	leafNode->setType(LEAF);
+
+	int keyNum;
+	indexFileManager->read(&keyNum, *cur_pos, sizeof(int));
+	*cur_pos += sizeof(int);
+	leafNode->setKeyNum(keyNum);
+
+	long keyValue;
+	for (int i = 0; i < MAX_KEY; i++)
+	{
+		indexFileManager->read(&keyValue, *cur_pos, sizeof(long));
+		leafNode->setKeyValue(i, keyValue);
+		*cur_pos += sizeof(long);
+
+		if (keyValue > m_MaxKey) 
+		{
+			m_MaxKey = keyValue;
+		}
+	}
+
+	long data;
+	for (int i = 0; i < MAX_LEAF; i++)
+	{
+		indexFileManager->read(&data, *cur_pos, sizeof(long));
+		leafNode->setData(i, data);
+		*cur_pos += sizeof(long);
+	}
+
+	if (*lastNode == 0) 
+	{
+		m_DataHead = leafNode;
+	}
+	else
+	{
+		(*lastNode)->setRightSibling(leafNode);
+		leafNode->setLeftSibling(*lastNode);
+	}
+	*lastNode = leafNode;
 }

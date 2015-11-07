@@ -127,6 +127,10 @@ int InternalNode::getChildIndex(KeyType key, int keyIndex) const {
 	}
 }
 
+void InternalNode::getBytes(char * bytes) const
+{
+}
+
 /*р╤вс╫з╣Ц*/
 LeafNode::LeafNode() :FatherNode() {
 	setType(LEAF);
@@ -209,4 +213,8 @@ void LeafNode::borrowFrom(FatherNode* siblingNode, FatherNode* parentNode, int k
 
 int LeafNode::getChildIndex(KeyType key, int keyIndex) const {
 	return keyIndex;
+}
+
+void LeafNode::getBytes(char * bytes) const
+{
 }

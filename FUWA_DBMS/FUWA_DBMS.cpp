@@ -9,8 +9,8 @@
 #include "storage/DBFileManager.h"
 #include "storage/BitMapIterator.h"
 #include "storage/TableManager.h"
-#include "Index/BPlusNode.h"
-#include "Index/BPlusTree.h"
+#include "index/BPlusNode.h"
+#include "index/BPlusTree.h"
 #include <unordered_map>
 using namespace std;
 
@@ -82,6 +82,9 @@ int main()
 	//testSetBitMap();
 	//cout << sizeof(int) + sizeof(char) + sizeof(char*) << endl;
 
+
+
+	/*
 	//-------------test-------------
 	char * oneTuple = "Hello world!";
 	char * secTuple = "Hello, DBMS!!";
@@ -118,9 +121,14 @@ int main()
 
 	printf("DBMS shut down!\n");
 
+	*/
+
+
+
 	cout << "The B+ Tree start!" << endl;
-	BPlusTree* bPlusTree = new BPlusTree();
-	bPlusTree->printTree();
+	BPlusTree* bPlusTree = BPlusTree::getInstance();
+	//BPlusTree* bPlusTree = new BPlusTree();
+
 	int key, pos;
 	srand((unsigned)time(NULL));
 	for (int i = 0; i < 100; i++) {
@@ -132,18 +140,16 @@ int main()
 	}
 	bool x = bPlusTree->search(300);
 	cout << x << endl;
-    //bool z=bPlusTree->remove(60);
+	//bool z=bPlusTree->remove(60);
 	//cout << z << endl;
 	bool y = bPlusTree->search(60);
 	cout << y << endl;
-	//bPlusTree->insert(500, 500);
-	//bPlusTree->insert(320, 320);
+	bPlusTree->insert(500, 500);
+	bPlusTree->insert(320, 320);
 	bPlusTree->printTree();
 	bPlusTree->printData();
-
-
+	bPlusTree->writeToFile();
 
 	system("pause");
     return 0;
 }
-

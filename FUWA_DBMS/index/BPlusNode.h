@@ -34,6 +34,7 @@ public:
 	virtual void clear() = 0; //清空结点
 	virtual void borrowFrom(FatherNode* destNode, FatherNode* parentNode, int keyIndex,SIBLING_DIRECTION d) = 0; //从兄弟结点中借出键
 	virtual int getChildIndex(KeyType key, int keyIndex) const = 0; //得到指向孩子结点的指针
+	virtual void getBytes(char* bytes) const = 0;
 
 protected:
 	NODE_TYPE m_Type; //结点类型
@@ -57,6 +58,7 @@ public:
 	virtual void clear();
 	virtual void borrowFrom(FatherNode* destNode, FatherNode* parentNode, int keyIndex,SIBLING_DIRECTION d);
 	virtual int getChildIndex(KeyType key, int keyIndex) const;
+	virtual void getBytes(char* bytes) const;
 
 private:
 	FatherNode* m_Childs[MAX_CHILD]; //指向孩子结点
@@ -82,6 +84,7 @@ public:
 	virtual void clear();
 	virtual void borrowFrom(FatherNode* destNode, FatherNode* parentNode, int keyIndex, SIBLING_DIRECTION d);
 	virtual int getChildIndex(KeyType key, int keyIndex) const;
+	virtual void getBytes(char* bytes) const;
 
 private:
 	LeafNode* m_LeftSibling;
