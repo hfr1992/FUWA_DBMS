@@ -75,15 +75,18 @@ void InternalNode::mergeNode(FatherNode* parentNode, FatherNode* childNode, int 
 	for (i = 1; i <= childNode->getKeyNum(); ++i) {
 		insert(MIN_KEY + i, MIN_KEY + i + 1, childNode->getKeyValue(i - 1), ((InternalNode*)childNode)->getChild(i));
 	} //向原先结点中插入相邻结点的键值对
-	parentNode->removeKey(keyIndex, keyIndex + 1);
 	delete ((InternalNode*)parentNode)->getChild(keyIndex+1); //删除相邻结点
+	parentNode->removeKey(keyIndex, keyIndex + 1);
 }
 
 /*删除内部结点的键值*/
 void InternalNode::removeKey(int keyIndex, int childIndex) {
+	for (int i = 0; i < getKeyNum() - childIndex; i++)
+	{
+		setChild(childIndex + i, getChild(childIndex + i + 1));
+	}
 	for (int i = 0; i < getKeyNum() - keyIndex - 1; ++i) {
 		setKeyValue(keyIndex + i, getKeyValue(keyIndex + i + 1));
-		setChild(childIndex + i, getChild(childIndex + i + 1));
 	}//键值对依次向前移动
 	setKeyNum(getKeyNum() - 1);
 }

@@ -142,6 +142,7 @@ void BPlusTree::recursive_remove(FatherNode* parentNode, KeyType key) {
 			}
 			else if (pLeft) {
 				pLeft->mergeNode(parentNode, pChildNode, childIndex - 1);
+				((InternalNode*)parentNode)->setChild(childIndex - 1, pLeft);
 				pChildNode = pLeft;
 			}
 			else if (pRight) {

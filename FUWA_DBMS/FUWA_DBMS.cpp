@@ -140,14 +140,14 @@ int main()
 	}
 	bool x = bPlusTree->search(300);
 	cout << x << endl;
-	//bool z=bPlusTree->remove(60);
-	//cout << z << endl;
+	bool z=bPlusTree->remove(10);
+	cout << z << endl;
 	bool y = bPlusTree->search(60);
 	cout << y << endl;
-	bPlusTree->insert(500, 500);
-	bPlusTree->insert(320, 320);
+	//bPlusTree->insert(500, 500);
+	//bPlusTree->insert(320, 320);
 	bPlusTree->printTree();
-	bPlusTree->printData();
+	//bPlusTree->printData();
 	bPlusTree->writeToFile();
 
 	system("pause");
