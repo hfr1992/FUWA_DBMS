@@ -21,10 +21,10 @@ BPlusTree * BPlusTree::getInstance()
 	{
 		bPlusTree = new BPlusTree();
 
-		/*bPlusTree->readFromFile();
-		cout << "Print B+ Tree when the index is started: " << endl;
+		bPlusTree->readFromFile();
+		cout << "Print B+ Tree imported from file: " << endl;
 		bPlusTree->printTree();
-		bPlusTree->printData();*/
+		bPlusTree->printData();
 	}
 	return bPlusTree;
 }
